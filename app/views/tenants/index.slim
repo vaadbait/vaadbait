@@ -1,0 +1,52 @@
+ul class="nav nav-tabs"
+  li class="active" = link_to tag_icon(:list, pat(:list)), url(:tenants, :index)
+  li = link_to tag_icon(:plus, pat(:new)), url(:tenants, :new)
+
+div class="tabs-content"
+  table class="table table-striped table-hover table-condensed" id="list"
+    thead
+      tr
+        th class='header list-menu'
+          div class='dropdown'
+            a href='#' class='list-menu-toggle.dropdown-toggle dropdown-toggle' data-toggle='dropdown'
+              = tag_icon :magic
+              span class='caret'
+            ul class='list-menu dropdown-menu' role='dropdown'
+              li class='list-menu-wrapper' = link_to tag_icon(:check, pat(:select_all)), '#', :id => 'select-all', :class => 'list-menu-link'
+              li class='list-menu-wrapper list-menu-wrapper-disabled' = link_to tag_icon('check-empty', pat(:deselect_all)), '#', :id => 'deselect-all', :class => 'list-menu-link list-menu-link-disabled'
+              li class='list-menu-divider divider'
+              li class='list-menu-wrapper list-menu-wrapper-disabled'
+                = link_to tag_icon(:trash, pat(:delete_selected)), '#', :id => 'delete-selected', :class => 'list-menu-link list-menu-link-disabled'
+                div class='list-menu-popover-delete-selected popover right'
+                  div class='arrow'
+                  h3 class='popover-title' = pat(:delete_selected_title)
+                  div class='popover-content'
+                    - form_tag url(:tenants, :destroy_many), :method => :delete do
+                      = hidden_field_tag :tenant_ids, :'data-delete-many-ids' => true
+                      = submit_tag  pat(:delete), :class =>'list-menu-popover-delete-selected-btn btn btn-danger btn-small'
+                      div class='btn btn-small cancel' = pat(:cancel)
+        th class='header' = :id
+        th class='header' = :name
+        th class='header' = :surname
+        th class='header' = :email
+        th class='header list-row-action-header'
+
+    tbody
+      -@tenants.each do |tenant|
+        tr class='list-row'
+          td class='list-column list-selectable' = check_box_tag 'tenant_ids[]', :value => tenant.id, :class => 'list-selectable-checkbox'
+          td class='list-column' = tenant.id
+          td class='list-column' = tenant.name
+          td class='list-column' = tenant.surname
+          td class='list-column' = tenant.email
+          td class='list-column list-row-action'
+            div class='list-row-action-wrapper'
+              = link_to tag_icon(:edit), :href => url(:tenants, :edit, :id => tenant.id), :rel => :tooltip, :title => "#{pat(:edit)} tenant", :class => 'list-row-action-wrapper-link'
+              = link_to tag_icon(:trash), :rel => :tooltip, :title => "#{pat(:delete)} tenant", :class => 'list-row-action-delete-one list-row-action-wrapper-link'
+              div class='popover list-row-action-popover-delete-one left'
+                div class='arrow'
+                h3 class='popover-title' = pat(:delete, :model => "tenant")
+                div class='popover-content'
+                  - form_tag url(:tenants, :destroy, :id => tenant.id), :method => :delete do
+                    = submit_tag pat(:delete), :class =>'list-row-action-popover-delete-one-btn btn btn-danger btn-small'
+                    div class='btn btn-small cancel' = pat(:cancel)

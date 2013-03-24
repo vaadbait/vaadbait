@@ -1,0 +1,9 @@
+---
+:orm: datamapper
+:test: rspec
+:mock: none
+:script: jquery
+:renderer: slim
+:stylesheet: less
+:namespace: Vaadbait
+:admin_renderer: slim
